@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 Christmas Meal Sign-Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            evergreen: '#163A28',
+            pine: '#215239',
+            cranberry: '#9E2A2B',
+            berry: '#B83335',
+            cream: '#FAF7F2',
+            parchment: '#F3EDE2',
+            gold: '#C59B27',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF7F2;
+      background-image: radial-gradient(#E5DEC9 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .card-shadow {
+      box-shadow: 0 10px 30px -5px rgba(22, 58, 40, 0.08), 0 4px 10px -3px rgba(22, 58, 40, 0.04);
+    }
+
+    /* Snow & Santa Celebration Animations */
+    @keyframes snowfall {
+      0% {
+        transform: translateY(-20px) translateX(0px) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(105vh) translateX(var(--drift, 25px)) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes santaPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(30px) rotate(-6deg);
+      }
+      15% {
+        opacity: 1;
+        transform: scale(1.06) translateY(-4px) rotate(2deg);
+      }
+      25% {
+        transform: scale(1) translateY(0) rotate(0deg);
+      }
+      80% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.92) translateY(-15px);
+      }
+    }
+
+    @keyframes sleighFly {
+      0% {
+        transform: translateX(-120%) translateY(10px) rotate(-4deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(120vw) translateY(-25px) rotate(4deg);
+        opacity: 0;
+      }
+    }
+
+    .snowflake-particle {
+      position: fixed;
+      top: -24px;
+      pointer-events: none;
+      z-index: 60;
+      color: #ffffff;
+      text-shadow: 0 2px 6px rgba(22, 58, 40, 0.35), 0 0 10px rgba(197, 155, 39, 0.3);
+      animation-name: snowfall;
+      animation-timing-function: ease-in;
+      animation-fill-mode: forwards;
+    }
+
+    .santa-popup-anim {
+      animation: santaPop 3.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .sleigh-fly-anim {
+      animation: sleighFly 3.2s ease-in-out forwards;
+    }
+  </style>
+</head>
+<body class="text-stone-800 font-sans antialiased min-h-screen flex flex-col relative overflow-x-hidden">
+
+  <!-- Celebration Layer (Snow + Santa Overlay) -->
+  <div id="celebrationLayer" class="pointer-events-none fixed inset-0 z-50 hidden overflow-hidden">
+    <!-- Flying Sleigh Banner across top -->
+    <div id="sleighBanner" class="absolute top-16 left-0 text-3xl sm:text-4xl whitespace-nowrap drop-shadow-md">
+      🦌🦌🛷🎅✨
+    </div>
+
+    <!-- Center Santa Toast Card -->
+    <div class="w-full h-full flex items-center justify-center p-4">
+      <div id="santaCard" class="bg-evergreen/95 backdrop-blur-md text-cream border-2 border-gold rounded-3xl px-7 py-6 shadow-2xl text-center max-w-sm">
+        <div class="text-6xl mb-2 animate-bounce">🎅</div>
+        <h3 class="font-serif text-2xl font-bold text-amber-200 mb-1">Ho Ho Ho!</h3>
+        <p id="santaMessage" class="text-sm text-white/95 font-medium">You're officially on the nice list!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Header Banner -->
+  <header class="bg-evergreen text-cream relative overflow-hidden border-b-4 border-gold">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14 relative z-10 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pine/80 border border-gold/40 text-xs font-semibold tracking-wider uppercase text-amber-200 mb-4">
+        <span>🎄 Holiday Potluck &amp; Feast</span>
+      </div>
+      <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white mb-3">
+        2026 Christmas Meal
+      </h1>
+      <p class="font-serif italic text-xl sm:text-2xl text-amber-200/95 max-w-2xl mx-auto">
+        "Getting all these ho ho ho's together."
+      </p>
+
+      <!-- Live Sync Status & Host Tools Button -->
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <span id="syncStatusBadge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white/10 text-stone-200 border border-white/15">
+          <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span id="syncStatusText">Local Browser Mode (Not Connected to Sheet Yet)</span>
+        </span>
+        <button onclick="openHostModal()" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gold text-evergreen hover:bg-amber-300 transition shadow-sm cursor-pointer">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Host Tools &amp; Sheet Setup
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-1 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Left Column: Sign-Up Form -->
+      <section class="lg:col-span-5 bg-white rounded-2xl p-6 sm:p-7 border border-stone-200/80 card-shadow lg:sticky lg:top-6">
+        <div class="flex items-center gap-2.5 mb-1">
+          <span class="text-xl">🎁</span>
+          <h2 class="font-serif text-2xl font-bold text-evergreen">Claim Your Dish</h2>
+        </div>
+        <p class="text-sm text-stone-500 mb-6">Pick a category, type what you're bringing, and add it to the table.</p>
+
+        <form id="signupForm" class="space-y-4">
+          <div>
+            <label for="guestName" class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1.5">Your Name *</label>
+            <input type="text" id="guestName" required placeholder="e.g., Aunt Maria or Cousin Carlos"
+              class="w-full px-4 py-2.5 rounded-xl border border-stone-300 bg-cream/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-evergreen/20 focus:border-evergreen transition text-sm" />
+          </div>
+
+          <div>
+            <label for="category" class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1.5">Food / Drink Category *</label>
+            <div class="relative">
+              <select id="category" required
+                class="w-full px-4 py-2.5 rounded-xl border border-stone-300 bg-cream/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-evergreen/20 focus:border-evergreen transition text-sm appearance-none pr-10">
+                <option value="" disabled selected>Select a category...</option>
+                <option value="Protein">🥩 Protein / Main Dish</option>
+                <option value="Side">🥔 Side Dish</option>
+                <option value="Appetizer">🧀 Appetizer</option>
+                <option value="Dessert">🍮 Dessert</option>
+                <option value="Chips & Dips">🥨 Chips &amp; Dips</option>
+                <option value="Soda & Non-Alcoholic">🥤 Soda &amp; Non-Alcoholic</option>
+                <option value="Alcohol">🍷 Alcohol / Spirits</option>
+                <option value="Other">🍽️ Other / Supplies</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-stone-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="dishName" class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1.5">What Are You Bringing? *</label>
+            <input type="text" id="dishName" required placeholder="e.g., Homemade Flan, Pernil, Coquito..."
+              class="w-full px-4 py-2.5 rounded-xl border border-stone-300 bg-cream/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-evergreen/20 focus:border-evergreen transition text-sm" />
+          </div>
+
+          <div>
+            <label for="notes" class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1.5">Notes (Optional)</label>
+            <input type="text" id="notes" placeholder="e.g., Serves 10, gluten-free, needs oven space"
+              class="w-full px-4 py-2.5 rounded-xl border border-stone-300 bg-cream/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-evergreen/20 focus:border-evergreen transition text-sm" />
+          </div>
+
+          <button type="submit" id="submitBtn"
+            class="w-full py-3 px-5 rounded-xl bg-cranberry hover:bg-berry text-white font-semibold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer mt-2">
+            <span>Add to the Christmas Table</span>
+            <span>✨</span>
+          </button>
+        </form>
+
+        <div id="formFeedback" class="hidden mt-4 p-3 rounded-xl text-xs font-medium text-center"></div>
+      </section>
+
+      <!-- Right Column: Live Menu Board -->
+      <section class="lg:col-span-7 space-y-5">
+        <!-- Summary & Refresh Bar -->
+        <div class="bg-white rounded-2xl p-5 border border-stone-200/80 card-shadow flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="font-serif text-2xl font-bold text-evergreen">What Everyone's Bringing</h2>
+            <p class="text-xs text-stone-500 mt-0.5"><span id="totalCount" class="font-bold text-cranberry">0</span> items claimed so far</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="refreshData()" id="refreshBtn" title="Refresh list"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-stone-200 hover:bg-parchment text-xs font-semibold text-stone-700 transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              Refresh
+            </button>
+            <button onclick="exportCSV()"
+              class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-evergreen hover:bg-pine text-white text-xs font-semibold transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              Download List
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div id="filterBar" class="flex flex-wrap gap-2">
+          <button onclick="setFilter('All')" data-filter="All" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-evergreen text-white shadow-sm transition cursor-pointer">All Items</button>
+          <button onclick="setFilter('Protein')" data-filter="Protein" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🥩 Protein</button>
+          <button onclick="setFilter('Side')" data-filter="Side" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🥔 Side</button>
+          <button onclick="setFilter('Appetizer')" data-filter="Appetizer" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🧀 Appetizer</button>
+          <button onclick="setFilter('Dessert')" data-filter="Dessert" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🍮 Dessert</button>
+          <button onclick="setFilter('Chips & Dips')" data-filter="Chips & Dips" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🥨 Chips &amp; Dips</button>
+          <button onclick="setFilter('Soda & Non-Alcoholic')" data-filter="Soda & Non-Alcoholic" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🥤 Soda</button>
+          <button onclick="setFilter('Alcohol')" data-filter="Alcohol" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🍷 Alcohol</button>
+          <button onclick="setFilter('Other')" data-filter="Other" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🍽️ Other</button>
+        </div>
+
+        <!-- Dish Cards List -->
+        <div id="entriesContainer" class="space-y-3">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Host Tools & Google Sheet Setup Modal -->
+  <div id="hostModal" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-stone-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-stone-100 pb-4 mb-5">
+        <h3 class="font-serif text-2xl font-bold text-evergreen">Host Tools &amp; Live Sheet Sync</h3>
+        <button onclick="closeHostModal()" class="text-stone-400 hover:text-stone-700 p-1 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="space-y-5 text-sm">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1.5">Google Apps Script Web App URL</label>
+          <p class="text-xs text-stone-500 mb-2">Paste your deployed Google Web App link here so every family member's entry syncs live to your Google Sheet.</p>
+          <div class="flex gap-2">
+            <input type="url" id="scriptUrlInput" placeholder="https://script.google.com/macros/s/..."
+              class="flex-1 px-3.5 py-2 rounded-xl border border-stone-300 text-xs focus:outline-none focus:border-evergreen" />
+            <button onclick="saveScriptUrl()" class="px-4 py-2 rounded-xl bg-evergreen text-white text-xs font-semibold hover:bg-pine transition cursor-pointer">Save Link</button>
+          </div>
+        </div>
+
+        <div class="bg-parchment/70 rounded-xl p-4 border border-stone-200/80">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-evergreen">Google Apps Script Code</span>
+            <button onclick="copyScriptCode()" id="copyCodeBtn" class="text-xs font-semibold text-cranberry hover:underline cursor-pointer">Copy Code</button>
+          </div>
+          <pre id="appsScriptCode" class="text-[11px] bg-stone-900 text-emerald-300 p-3 rounded-lg overflow-x-auto leading-relaxed">function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var result = [];
+  for (var i = 1; i &lt; data.length; i++) {
+    if (data[i][0] || data[i][1] || data[i][2]) {
+      result.push({
+        id: i.toString(),
+        timestamp: data[i][0] || '',
+        name: data[i][1] || '',
+        category: data[i][2] || '',
+        dish: data[i][3] || '',
+        notes: data[i][4] || ''
+      });
+    }
+  }
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = JSON.parse(e.postData.contents);
+  var timestamp = new Date().toISOString();
+  sheet.appendRow([timestamp, data.name, data.category, data.dish, data.notes]);
+  return ContentService.createTextOutput(JSON.stringify({status: "success"})).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+        </div>
+
+        <div class="pt-3 border-t border-stone-100 flex flex-wrap items-center justify-between gap-3">
+          <button onclick="triggerChristmasCelebration('Test Guest', 'Homemade Flan')" class="px-4 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-semibold transition cursor-pointer">
+            ❄️ Preview Santa &amp; Snow
+          </button>
+          <div class="flex items-center gap-2">
+            <button onclick="exportCSV()" class="px-4 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-semibold transition cursor-pointer">
+              Export CSV
+            </button>
+            <button onclick="clearLocalEntries()" class="px-4 py-2 rounded-xl text-red-600 hover:bg-red-50 text-xs font-semibold transition cursor-pointer">
+              Clear Local
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // CONFIGURATION: Paste your Google Apps Script Web App URL inside the quotes
+    // below before uploading to GitHub so it connects automatically for everyone!
+    // =========================================================================
+    const HARDCODED_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydJZjfwEIhX5YcH0xG6u_UcVsx8WyUQ-oSz9N1h07_hzHZllSShFihNZwQhYgU5d5j0g/exec";
+
+    const STORAGE_KEY = 'christmas_meal_2026_entries';
+    const URL_STORAGE_KEY = 'christmas_meal_2026_script_url';
+
+    let entries = [];
+    let currentFilter = 'All';
+    let celebrationTimeout = null;
+
+    const categoryMeta = {
+      'Protein': { emoji: '🥩', badge: 'bg-red-100 text-red-900 border-red-200' },
+      'Side': { emoji: '🥔', badge: 'bg-amber-100 text-amber-900 border-amber-200' },
+      'Appetizer': { emoji: '🧀', badge: 'bg-orange-100 text-orange-900 border-orange-200' },
+      'Dessert': { emoji: '🍮', badge: 'bg-pink-100 text-pink-900 border-pink-200' },
+      'Chips & Dips': { emoji: '🥨', badge: 'bg-yellow-100 text-yellow-900 border-yellow-200' },
+      'Soda & Non-Alcoholic': { emoji: '🥤', badge: 'bg-sky-100 text-sky-900 border-sky-200' },
+      'Alcohol': { emoji: '🍷', badge: 'bg-purple-100 text-purple-900 border-purple-200' },
+      'Other': { emoji: '🍽️', badge: 'bg-emerald-100 text-emerald-900 border-emerald-200' }
+    };
+
+    // Trigger Snowfall + Santa Celebration
+    function triggerChristmasCelebration(guestName, dishName) {
+      const layer = document.getElementById('celebrationLayer');
+      const santaCard = document.getElementById('santaCard');
+      const sleighBanner = document.getElementById('sleighBanner');
+      const santaMessage = document.getElementById('santaMessage');
+
+      if (celebrationTimeout) {
+        clearTimeout(celebrationTimeout);
+      }
+
+      // Personalize Santa's message
+      santaMessage.textContent = `${guestName} is bringing ${dishName}!`;
+
+      // Reset animations
+      layer.classList.remove('hidden');
+      santaCard.classList.remove('santa-popup-anim');
+      sleighBanner.classList.remove('sleigh-fly-anim');
+      void santaCard.offsetWidth; // trigger reflow
+      santaCard.classList.add('santa-popup-anim');
+      sleighBanner.classList.add('sleigh-fly-anim');
+
+      // Spawn falling snowflakes across the viewport
+      const flakes = ['❄️', '❅', '❆', '•'];
+      const flakeCount = 55;
+
+      for (let i = 0; i < flakeCount; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'snowflake-particle';
+        flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+
+        const startLeft = Math.random() * 100;
+        const size = 12 + Math.random() * 18;
+        const duration = 2.4 + Math.random() * 2.0;
+        const delay = Math.random() * 0.7;
+        const drift = (Math.random() - 0.5) * 90;
+
+        flake.style.left = `${startLeft}vw`;
+        flake.style.fontSize = `${size}px`;
+        flake.style.animationDuration = `${duration}s`;
+        flake.style.animationDelay = `${delay}s`;
+        flake.style.setProperty('--drift', `${drift}px`);
+
+        document.body.appendChild(flake);
+        setTimeout(() => flake.remove(), (duration + delay) * 1000 + 100);
+      }
+
+      // Hide celebration overlay cleanly after animation finishes
+      celebrationTimeout = setTimeout(() => {
+        layer.classList.add('hidden');
+      }, 3700);
+    }
+
+    function getActiveScriptUrl() {
+      return HARDCODED_SCRIPT_URL.trim() || localStorage.getItem(URL_STORAGE_KEY) || '';
+    }
+
+    function updateSyncUI() {
+      const url = getActiveScriptUrl();
+      const dot = document.getElementById('syncDot');
+      const text = document.getElementById('syncStatusText');
+      if (url) {
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        text.textContent = 'Live Connected to Google Sheet';
+      } else {
+        dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+        text.textContent = 'Local Mode (Add Sheet URL in Host Tools)';
+      }
+    }
+
+    async function loadEntries() {
+      const url = getActiveScriptUrl();
+      updateSyncUI();
+
+      if (url) {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          if (Array.isArray(data)) {
+            entries = data;
+            renderEntries();
+            return;
+          }
+        } catch (err) {
+          console.error('Error fetching from Google Sheet:', err);
+        }
+      }
+
+      const saved = localStorage.getItem(STORAGE_KEY);
+      entries = saved ? JSON.parse(saved) : [];
+      renderEntries();
+    }
+
+    function renderEntries() {
+      const container = document.getElementById('entriesContainer');
+      const countEl = document.getElementById('totalCount');
+      countEl.textContent = entries.length;
+
+      const filtered = currentFilter === 'All'
+        ? entries
+        : entries.filter(item => item.category === currentFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white/80 rounded-2xl p-10 text-center border border-dashed border-stone-300">
+            <div class="text-3xl mb-2">🎄</div>
+            <h3 class="font-serif text-lg font-bold text-evergreen mb-1">No dishes listed yet</h3>
+            <p class="text-xs text-stone-500 max-w-xs mx-auto">
+              ${currentFilter === 'All'
+                ? 'Be the first to claim a dish on the left and kick off the 2026 Christmas Meal!'
+                : `No one has signed up for ${currentFilter} yet. Want to claim it?`}
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.slice().reverse().map((item) => {
+        const meta = categoryMeta[item.category] || categoryMeta['Other'];
+        const isLocal = !getActiveScriptUrl();
+        return `
+          <div class="bg-white rounded-2xl p-4 sm:p-5 border border-stone-200/80 card-shadow flex items-start justify-between gap-4 transition hover:border-evergreen/30">
+            <div class="flex items-start gap-3.5">
+              <div class="w-10 h-10 rounded-xl bg-parchment flex items-center justify-center text-xl shrink-0">
+                ${meta.emoji}
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="font-bold text-base text-stone-900">${escapeHtml(item.dish)}</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${meta.badge}">
+                    ${escapeHtml(item.category)}
+                  </span>
+                </div>
+                <p class="text-xs text-stone-600">
+                  Brought by <span class="font-semibold text-evergreen">${escapeHtml(item.name)}</span>
+                  ${item.notes ? `<span class="text-stone-400 mx-1.5">•</span><span class="italic text-stone-500">${escapeHtml(item.notes)}</span>` : ''}
+                </p>
+              </div>
+            </div>
+            ${isLocal ? `
+              <button onclick="deleteLocalEntry('${item.id}')" title="Remove item" class="text-stone-300 hover:text-red-500 transition p-1 cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+              </button>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('guestName').value.trim();
+      const category = document.getElementById('category').value;
+      const dish = document.getElementById('dishName').value.trim();
+      const notes = document.getElementById('notes').value.trim();
+
+      if (!name || !category || !dish) return;
+
+      const btn = document.getElementById('submitBtn');
+      const originalBtnHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span>Adding to Table...</span>';
+
+      const newEntry = {
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString(),
+        name,
+        category,
+        dish,
+        notes
+      };
+
+      const url = getActiveScriptUrl();
+
+      if (url) {
+        try {
+          await fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newEntry)
+          });
+          entries.push(newEntry);
+          renderEntries();
+          triggerChristmasCelebration(name, dish);
+          showFeedback('Added! Synced to the live Christmas Meal list.', 'bg-emerald-50 text-emerald-800 border border-emerald-200');
+          setTimeout(loadEntries, 1500);
+        } catch (err) {
+          showFeedback('Could not sync to Google Sheet. Check your Web App URL.', 'bg-red-50 text-red-800 border border-red-200');
+        }
+      } else {
+        entries.push(newEntry);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+        renderEntries();
+        triggerChristmasCelebration(name, dish);
+        showFeedback('Added! Connect your Google Sheet in Host Tools for live sharing.', 'bg-amber-50 text-amber-900 border border-amber-200');
+      }
+
+      document.getElementById('signupForm').reset();
+      btn.disabled = false;
+      btn.innerHTML = originalBtnHtml;
+    });
+
+    function showFeedback(msg, classes) {
+      const el = document.getElementById('formFeedback');
+      el.className = `mt-4 p-3 rounded-xl text-xs font-medium text-center ${classes}`;
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 5000);
+    }
+
+    function setFilter(category) {
+      currentFilter = category;
+      document.querySelectorAll('.filter-pill').forEach(btn => {
+        if (btn.dataset.filter === category) {
+          btn.className = 'filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-evergreen text-white shadow-sm transition cursor-pointer';
+        } else {
+          btn.className = 'filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer';
+        }
+      });
+      renderEntries();
+    }
+
+    function deleteLocalEntry(id) {
+      entries = entries.filter(item => item.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      renderEntries();
+    }
+
+    function clearLocalEntries() {
+      localStorage.removeItem(STORAGE_KEY);
+      if (!getActiveScriptUrl()) {
+        entries = [];
+        renderEntries();
+      }
+      closeHostModal();
+    }
+
+    function refreshData() {
+      const btn = document.getElementById('refreshBtn');
+      btn.classList.add('opacity-50');
+      loadEntries().finally(() => {
+        setTimeout(() => btn.classList.remove('opacity-50'), 300);
+      });
+    }
+
+    function exportCSV() {
+      const headers = ['Name', 'Category', 'Dish / Item', 'Notes', 'Timestamp'];
+      const rows = entries.map(e => [
+        `"${(e.name || '').replace(/"/g, '""')}"`,
+        `"${(e.category || '').replace(/"/g, '""')}"`,
+        `"${(e.dish || '').replace(/"/g, '""')}"`,
+        `"${(e.notes || '').replace(/"/g, '""')}"`,
+        `"${(e.timestamp || '').replace(/"/g, '""')}"`
+      ]);
+      const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('
+');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = '2026_Christmas_Meal_Master_List.csv';
+      link.click();
+    }
+
+    function openHostModal() {
+      document.getElementById('scriptUrlInput').value = getActiveScriptUrl();
+      document.getElementById('hostModal').classList.remove('hidden');
+    }
+
+    function closeHostModal() {
+      document.getElementById('hostModal').classList.add('hidden');
+    }
+
+    function saveScriptUrl() {
+      const val = document.getElementById('scriptUrlInput').value.trim();
+      if (val) {
+        localStorage.setItem(URL_STORAGE_KEY, val);
+      } else {
+        localStorage.removeItem(URL_STORAGE_KEY);
+      }
+      closeHostModal();
+      loadEntries();
+    }
+
+    function copyScriptCode() {
+      const code = document.getElementById('appsScriptCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('copyCodeBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Code', 2000);
+      });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Initial load
+    loadEntries();
+  </script>
+</body>
+</html>
