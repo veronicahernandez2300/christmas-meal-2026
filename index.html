@@ -39,7 +39,6 @@
       box-shadow: 0 10px 30px -5px rgba(22, 58, 40, 0.08), 0 4px 10px -3px rgba(22, 58, 40, 0.04);
     }
 
-    /* Snow & Santa Celebration Animations */
     @keyframes snowfall {
       0% {
         transform: translateY(-20px) translateX(0px) rotate(0deg);
@@ -121,12 +120,10 @@
 
   <!-- Celebration Layer (Snow + Santa Overlay) -->
   <div id="celebrationLayer" class="pointer-events-none fixed inset-0 z-50 hidden overflow-hidden">
-    <!-- Flying Sleigh Banner across top -->
     <div id="sleighBanner" class="absolute top-16 left-0 text-3xl sm:text-4xl whitespace-nowrap drop-shadow-md">
       🦌🦌🛷🎅✨
     </div>
 
-    <!-- Center Santa Toast Card -->
     <div class="w-full h-full flex items-center justify-center p-4">
       <div id="santaCard" class="bg-evergreen/95 backdrop-blur-md text-cream border-2 border-gold rounded-3xl px-7 py-6 shadow-2xl text-center max-w-sm">
         <div class="text-6xl mb-2 animate-bounce">🎅</div>
@@ -149,7 +146,6 @@
         "Getting all these ho ho ho's together."
       </p>
 
-      <!-- Live Sync Status & Host Tools Button -->
       <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
         <span id="syncStatusBadge" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white/10 text-stone-200 border border-white/15">
           <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
@@ -227,7 +223,6 @@
 
       <!-- Right Column: Live Menu Board -->
       <section class="lg:col-span-7 space-y-5">
-        <!-- Summary & Refresh Bar -->
         <div class="bg-white rounded-2xl p-5 border border-stone-200/80 card-shadow flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 class="font-serif text-2xl font-bold text-evergreen">What Everyone's Bringing</h2>
@@ -247,7 +242,6 @@
           </div>
         </div>
 
-        <!-- Category Filter Pills -->
         <div id="filterBar" class="flex flex-wrap gap-2">
           <button onclick="setFilter('All')" data-filter="All" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-evergreen text-white shadow-sm transition cursor-pointer">All Items</button>
           <button onclick="setFilter('Protein')" data-filter="Protein" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🥩 Protein</button>
@@ -260,9 +254,7 @@
           <button onclick="setFilter('Other')" data-filter="Other" class="filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer">🍽️ Other</button>
         </div>
 
-        <!-- Dish Cards List -->
         <div id="entriesContainer" class="space-y-3">
-          <!-- Populated dynamically -->
         </div>
       </section>
     </div>
@@ -340,11 +332,8 @@ function doPost(e) {
   </div>
 
   <script>
-    // =========================================================================
-    // CONFIGURATION: Paste your Google Apps Script Web App URL inside the quotes
-    // below before uploading to GitHub so it connects automatically for everyone!
-    // =========================================================================
-    const HARDCODED_SCRIPT_URL = "[https://script.google.com/macros/s/AKfycbydJZjfwEIhX5YcH0xG6u_UcVsx8WyUQ-oSz9N1h07_hzHZllSShFihNZwQhYgU5d5j0g/exec](https://script.google.com/macros/s/AKfycbydJZjfwEIhX5YcH0xG6u_UcVsx8WyUQ-oSz9N1h07_hzHZllSShFihNZwQhYgU5d5j0g/exec)";
+    const HARDCODED_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydJZjfwEIhX5YcH0xG6u_UcVsx8WyUQ-oSz9N1h07_hzHZllSShFihNZwQhYgU5d5j0g/exec";
+
     const STORAGE_KEY = 'christmas_meal_2026_entries';
     const URL_STORAGE_KEY = 'christmas_meal_2026_script_url';
 
@@ -363,7 +352,6 @@ function doPost(e) {
       'Other': { emoji: '🍽️', badge: 'bg-emerald-100 text-emerald-900 border-emerald-200' }
     };
 
-    // Trigger Snowfall + Santa Celebration
     function triggerChristmasCelebration(guestName, dishName) {
       const layer = document.getElementById('celebrationLayer');
       const santaCard = document.getElementById('santaCard');
@@ -374,43 +362,14 @@ function doPost(e) {
         clearTimeout(celebrationTimeout);
       }
 
-      // Personalize Santa's message
-      santaMessage.textContent = `${guestName} is bringing ${dishName}!`;
-
-      // Reset animations
-      layer.classList.remove('hidden');
-      santaCard.classList.remove('santa-popup-anim');
-      sleighBanner.classList.remove('sleigh-fly-anim');
-      void santaCard.offsetWidth; // trigger reflow
-      santaCard.classList.add('santa-popup-anim');
-      sleighBanner.classList.add('sleigh-fly-anim');
-
-      // Spawn falling snowflakes across the viewport
-      const flakes = ['❄️', '❅', '❆', '•'];
-      const flakeCount = 55;
-
-      for (let i = 0; i < flakeCount; i++) {
-        const flake = document.createElement('div');
-        flake.className = 'snowflake-particle';
-        flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
-
-        const startLeft = Math.random() * 100;
-        const size = 12 + Math.random() * 18;
-        const duration = 2.4 + Math.random() * 2.0;
-        const delay = Math.random() * 0.7;
-        const drift = (Math.random() - 0.5) * 90;
-
-        flake.style.left = `${startLeft}vw`;
-        flake.style.fontSize = `${size}px`;
-        flake.style.animationDuration = `${duration}s`;
-        flake.style.animationDelay = `${delay}s`;
-        flake.style.setProperty('--drift', `${drift}px`);
+      santaMessage.textContent = `${guestName} is bringing ${dishName}!`;  layer.classList.remove('hidden'); santaCard.classList.remove('santa-popup-anim'); sleighBanner.classList.remove('sleigh-fly-anim'); void santaCard.offsetWidth; santaCard.classList.add('santa-popup-anim'); sleighBanner.classList.add('sleigh-fly-anim');  const flakes = ['❄️', '❅', '❆', '•']; const flakeCount = 55;  for (let i = 0; i < flakeCount; i++) { const flake = document.createElement('div'); flake.className = 'snowflake-particle'; flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];  const startLeft = Math.random() * 100; const size = 12 + Math.random() * 18; const duration = 2.4 + Math.random() * 2.0; const delay = Math.random() * 0.7; const drift = (Math.random() - 0.5) * 90;  flake.style.left = `${startLeft}vw`;
+        flake.style.fontSize = `${size}px`; flake.style.animationDuration = `${duration}s`;
+        flake.style.animationDelay = `${delay}s`; flake.style.setProperty('--drift', `${drift}px`);
 
         document.body.appendChild(flake);
         setTimeout(() => flake.remove(), (duration + delay) * 1000 + 100);
       }
 
-      // Hide celebration overlay cleanly after animation finishes
       celebrationTimeout = setTimeout(() => {
         layer.classList.add('hidden');
       }, 3700);
@@ -497,177 +456,4 @@ function doPost(e) {
                   </span>
                 </div>
                 <p class="text-xs text-stone-600">
-                  Brought by <span class="font-semibold text-evergreen">${escapeHtml(item.name)}</span>
-                  ${item.notes ? `<span class="text-stone-400 mx-1.5">•</span><span class="italic text-stone-500">${escapeHtml(item.notes)}</span>` : ''}
-                </p>
-              </div>
-            </div>
-            ${isLocal ? `
-              <button onclick="deleteLocalEntry('${item.id}')" title="Remove item" class="text-stone-300 hover:text-red-500 transition p-1 cursor-pointer">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-              </button>
-            ` : ''}
-          </div>
-        `;
-      }).join('');
-    }
-
-    document.getElementById('signupForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('guestName').value.trim();
-      const category = document.getElementById('category').value;
-      const dish = document.getElementById('dishName').value.trim();
-      const notes = document.getElementById('notes').value.trim();
-
-      if (!name || !category || !dish) return;
-
-      const btn = document.getElementById('submitBtn');
-      const originalBtnHtml = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<span>Adding to Table...</span>';
-
-      const newEntry = {
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-        name,
-        category,
-        dish,
-        notes
-      };
-
-      const url = getActiveScriptUrl();
-
-      if (url) {
-        try {
-          await fetch(url, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newEntry)
-          });
-          entries.push(newEntry);
-          renderEntries();
-          triggerChristmasCelebration(name, dish);
-          showFeedback('Added! Synced to the live Christmas Meal list.', 'bg-emerald-50 text-emerald-800 border border-emerald-200');
-          setTimeout(loadEntries, 1500);
-        } catch (err) {
-          showFeedback('Could not sync to Google Sheet. Check your Web App URL.', 'bg-red-50 text-red-800 border border-red-200');
-        }
-      } else {
-        entries.push(newEntry);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-        renderEntries();
-        triggerChristmasCelebration(name, dish);
-        showFeedback('Added! Connect your Google Sheet in Host Tools for live sharing.', 'bg-amber-50 text-amber-900 border border-amber-200');
-      }
-
-      document.getElementById('signupForm').reset();
-      btn.disabled = false;
-      btn.innerHTML = originalBtnHtml;
-    });
-
-    function showFeedback(msg, classes) {
-      const el = document.getElementById('formFeedback');
-      el.className = `mt-4 p-3 rounded-xl text-xs font-medium text-center ${classes}`;
-      el.textContent = msg;
-      el.classList.remove('hidden');
-      setTimeout(() => el.classList.add('hidden'), 5000);
-    }
-
-    function setFilter(category) {
-      currentFilter = category;
-      document.querySelectorAll('.filter-pill').forEach(btn => {
-        if (btn.dataset.filter === category) {
-          btn.className = 'filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-evergreen text-white shadow-sm transition cursor-pointer';
-        } else {
-          btn.className = 'filter-pill px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-600 border border-stone-200 hover:border-evergreen transition cursor-pointer';
-        }
-      });
-      renderEntries();
-    }
-
-    function deleteLocalEntry(id) {
-      entries = entries.filter(item => item.id !== id);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-      renderEntries();
-    }
-
-    function clearLocalEntries() {
-      localStorage.removeItem(STORAGE_KEY);
-      if (!getActiveScriptUrl()) {
-        entries = [];
-        renderEntries();
-      }
-      closeHostModal();
-    }
-
-    function refreshData() {
-      const btn = document.getElementById('refreshBtn');
-      btn.classList.add('opacity-50');
-      loadEntries().finally(() => {
-        setTimeout(() => btn.classList.remove('opacity-50'), 300);
-      });
-    }
-
-    function exportCSV() {
-      const headers = ['Name', 'Category', 'Dish / Item', 'Notes', 'Timestamp'];
-      const rows = entries.map(e => [
-        `"${(e.name || '').replace(/"/g, '""')}"`,
-        `"${(e.category || '').replace(/"/g, '""')}"`,
-        `"${(e.dish || '').replace(/"/g, '""')}"`,
-        `"${(e.notes || '').replace(/"/g, '""')}"`,
-        `"${(e.timestamp || '').replace(/"/g, '""')}"`
-      ]);
-      const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('
-');
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = '2026_Christmas_Meal_Master_List.csv';
-      link.click();
-    }
-
-    function openHostModal() {
-      document.getElementById('scriptUrlInput').value = getActiveScriptUrl();
-      document.getElementById('hostModal').classList.remove('hidden');
-    }
-
-    function closeHostModal() {
-      document.getElementById('hostModal').classList.add('hidden');
-    }
-
-    function saveScriptUrl() {
-      const val = document.getElementById('scriptUrlInput').value.trim();
-      if (val) {
-        localStorage.setItem(URL_STORAGE_KEY, val);
-      } else {
-        localStorage.removeItem(URL_STORAGE_KEY);
-      }
-      closeHostModal();
-      loadEntries();
-    }
-
-    function copyScriptCode() {
-      const code = document.getElementById('appsScriptCode').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        const btn = document.getElementById('copyCodeBtn');
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = 'Copy Code', 2000);
-      });
-    }
-
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    // Initial load
-    loadEntries();
-  </script>
-</body>
-</html>
+                  Brought by <span class="font-semibold text-evergreen">${escapeHtml(item.name)}</span>${item.notes ?
